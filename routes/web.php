@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ToDoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,9 +38,13 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('home', [\App\Http\Controllers\IndexController::class, 'index'])
-    ->name('home');
+Route::get('to-do-list', [ToDoController::class, 'index'])->name('to-do-list');
 
-Route::post('remove', [\App\Http\Controllers\IndexController::class, 'remove'])->name('todo.remove');
-Route::post('add', [\App\Http\Controllers\IndexController::class, 'add'])->name('todo.add');
+Route::prefix('to-do-list')->group(function () {
+    Route::get('/edit/{id}', [ ToDoController::class, 'edit'])->name('todo.edit');
+    Route::post('/remove', [ToDoController::class, 'remove'])->name('todo.remove');
+    Route::post('/add', [ToDoController::class, 'add'])->name('todo.add');
+    Route::post('/save', [ToDoController::class, 'save'])->name('todo.save');
+});
+
 
